@@ -3,6 +3,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
+import csv
 
 nameCareer = []
 lowercaseLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -55,15 +56,18 @@ for c in lowercaseLetters:
                     positions.append(word)    
         if len(positions) != 0:
             positions.insert(0, nameFinal)
+            positions.insert(0, urls)
             nameCareer.append(positions)          
 
     print(c)
     
  ##use nameCareer and print it out nicely into a textfile for further use, need to delete the \n and only keep the years
 ##also need to delete dashes   
-file = open("databaseON.txt","w") 
-for smallList in nameCareer:
-    file.write(smallList)
+
+with open('OntarioDataBase.csv', 'w') as csvfile:
+    writer = csv.writer(csvfile, delimiter = ",")
+    for theCareers in nameCareer:
+        writer.writerow(theCareers)
 print("hello")
 
 
