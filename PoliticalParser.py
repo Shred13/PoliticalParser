@@ -7,11 +7,20 @@ from bs4 import BeautifulSoup ##this allows me to parse information from the int
 import re ##re allows me to use regex on the output
 import csv ##csv allows me to output into csv (comma seperated value) files 
 
+
+
+
 nameCareer = [] ##this is going to be the final list that I work with which should have all my infromation
-lowercaseLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+
+parliamentaryList = []
+for lister in range (42):
+    parliamentaryList.append([])
+    parliamentaryList[lister].insert(0, str(lister))
+##lowercaseLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 ##^^ the above array is used to quickly traverse the ontario website and see all the MPPs in history
-for c in lowercaseLetters:
-    url = "https://www.ola.org/en/members/last-name/" + c
+##for c in lowercaseLetters:
+    url = "https://www.ola.org/en/members/parliament-"+str(lister+1)
     ##^^as you can see, the ola website is sectioned off by last names, and so I can use this for loop to quickly go through it
     
     uClient = urlopen(url)
@@ -24,7 +33,7 @@ for c in lowercaseLetters:
     soup = BeautifulSoup(content, 'html.parser')
     ##create an obeject that sees the link that is to be read and then parses its html
     
-    findName = soup.findAll("td", {"class":"views-field views-field-field-full-name-by-last-name is-active"})
+    findName = soup.findAll("td", {"class":"views-field views-field-field-full-name-by-last-name"})
     ##this is to find the names and links of all the MPPs and their profiles. td is a part of the table and the class is where the names are
     
     urlList = []
@@ -68,7 +77,7 @@ for c in lowercaseLetters:
             checkCareer = aCareer.split(" ")
             ##split the careers by the space in order to filter out everything that is not a Premier or Minister.
             for theCareer in checkCareer:
-                if ("Premier" == theCareer or "Minister" == theCareer) and checkCareer[0] != "Parliamentary":
+                if ("Premier" == theCareer or "Minister" == theCareer or "Treasurer" == theCareer) and checkCareer[0] != "Parliamentary":
                     ##filters out for parliamentary assisstants this way as well, though a few did get in eventually
                     word = aCareer.replace("\n", "").replace("–", "").replace("January", "").replace("February", "").replace("March", "").replace("April", "").replace("May", "").replace("June", "").replace("July", "").replace("August", "").replace("September", "").replace("October", "").replace("November", "").replace("December", "")
                     ##only wanted the years for the beginning and ending of their terms, not the months
@@ -81,10 +90,10 @@ for c in lowercaseLetters:
             ##add the names to the beginning of the list
             positions.insert(0, urls)
             ##add the url to the beginning of the list for further parsing
-            nameCareer.append(positions)          
+            parliamentaryList[lister].append(positions)          
             ##new list with the lists that made it
 
-    print(c)
+    print(lister+1)
     ##print the char we just finished for this entire process as a mini loading bar type deal
  ##use nameCareer and print it out nicely into a textfile for further use, need to delete the \n and only keep the years
 ##also need to delete dashes   
@@ -93,7 +102,7 @@ with open('OntarioDataBase.csv', 'w') as csvfile:
     ##write a csv file
     writer = csv.writer(csvfile, delimiter = ",")
     ##with ',' in between the elements
-    for theCareers in nameCareer:
+    for theCareers in parliamentaryList:
         writer.writerow(theCareers)
         ##write a row in the document of just the lists
 print("hello")
