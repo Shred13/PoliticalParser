@@ -4,11 +4,12 @@
 ##the below code is for importing necessary libraries and tools
 from urllib.request import urlopen ##urllib allows me to open up urls successfully
 from bs4 import BeautifulSoup ##this allows me to parse information from the internet
-import re ##re allows me to use regex on the output
-import csv ##csv allows me to output into csv (comma seperated value) files 
+## import re ##re allows me to use regex on the output
+##import csv ##csv allows me to output into csv (comma seperated value) files 
+import pickle
 
 
-
+x=5
 
 nameCareer = [] ##this is going to be the final list that I work with which should have all my infromation
 
@@ -16,7 +17,7 @@ nameCareer = [] ##this is going to be the final list that I work with which shou
 parliamentaryList = []
 for lister in range (42):
     parliamentaryList.append([])
-    parliamentaryList[lister].insert(0, str(lister))
+    parliamentaryList[lister].insert(0, str(lister+1))
 ##lowercaseLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 ##^^ the above array is used to quickly traverse the ontario website and see all the MPPs in history
 ##for c in lowercaseLetters:
@@ -40,7 +41,7 @@ for lister in range (42):
     ##this list is to traverse every single link to every MPP's profile
     for name in findName:
         nameString = str(name.a["href"])
-        ##make the href link a string value which can then be used 
+        ##make the href link a string value which can then be used  
         urlList.append("https://www.ola.org" + nameString)
     
     for urls in urlList:
@@ -81,16 +82,16 @@ for lister in range (42):
                     ##filters out for parliamentary assisstants this way as well, though a few did get in eventually
                     word = aCareer.replace("\n", "").replace("–", "").replace("January", "").replace("February", "").replace("March", "").replace("April", "").replace("May", "").replace("June", "").replace("July", "").replace("August", "").replace("September", "").replace("October", "").replace("November", "").replace("December", "")
                     ##only wanted the years for the beginning and ending of their terms, not the months
-                    word = re.sub(r'\s\s\d?\d', "", word)
+                  ##  word = re.sub(r'\s\s\d?\d', "", word)
                     ##nor for the dates as well (regex looking for space, space and two digits)
                     positions.append(word)    
         if len(positions) != 0:
             ##if the length of positions is not zero, meaning they had a position at one point
-            positions.insert(0, nameFinal)
+           ## positions.insert(0, nameFinal)
             ##add the names to the beginning of the list
-            positions.insert(0, urls)
+           ## positions.insert(0, urls)
             ##add the url to the beginning of the list for further parsing
-            parliamentaryList[lister].append(positions)          
+            parliamentaryList[lister].insert(0, urls)          
             ##new list with the lists that made it
 
     print(lister+1)
@@ -98,13 +99,22 @@ for lister in range (42):
  ##use nameCareer and print it out nicely into a textfile for further use, need to delete the \n and only keep the years
 ##also need to delete dashes   
 
-with open('OntarioDataBase.csv', 'w') as csvfile:
-    ##write a csv file
-    writer = csv.writer(csvfile, delimiter = ",")
-    ##with ',' in between the elements
-    for theCareers in parliamentaryList:
-        writer.writerow(theCareers)
-        ##write a row in the document of just the lists
+
+
+with open("OntarioDB.txt", "wb") as fp:   #Pickling
+    pickle.dump(parliamentaryList, fp)
+
+
+# =============================================================================
+# 
+# with open('OntarioDataBase.csv', 'w') as csvfile:
+#     ##write a csv file
+#     writer = csv.writer(csvfile, delimiter = ",")
+#     ##with ',' in between the elements
+#     for theCareers in parliamentaryList:
+#         writer.writerow(theCareers)
+#         ##write a row in the document of just the lists
+# =============================================================================
 print("hello")
 ##print hello to signify ending of the program
 
