@@ -17,7 +17,7 @@ nameCareer = [] ##this is going to be the final list that I work with which shou
 parliamentaryList = []
 for lister in range (42):
     parliamentaryList.append([])
-    parliamentaryList[lister].insert(0, str(lister+1))
+   ## parliamentaryList[lister].insert(0, str(lister+1))
 ##lowercaseLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 ##^^ the above array is used to quickly traverse the ontario website and see all the MPPs in history
 ##for c in lowercaseLetters:
